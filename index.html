@@ -1,0 +1,700 @@
+</index.html> <!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+   <meta name="monetag" content="9c350c9e56bdd23dafe2200de4cb5124"> 
+    <title>Juragan Kopi Clicker</title>
+    <!-- Menggunakan font bergaya game/modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS: DESAIN MODERN & RAMAH MOBILE (HP) --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none; /* Mencegah teks terpilih saat diketuk cepat di HP */
+            -webkit-user-select: none;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e1b18 0%, #432818 100%);
+            color: #fff;
+            font-family: 'Quicksand', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #ddb892;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .tagline {
+            font-size: 0.85rem;
+            color: #b08968;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Container Utama */
+        .game-container {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(58, 38, 24, 0.6);
+            backdrop-filter: blur(10px);
+            border: 2px solid #7f5539;
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Bagian Skor & Statistik */
+        .stats-panel {
+            width: 100%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(221, 184, 146, 0.2);
+        }
+
+        .coin-display {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.2rem;
+            color: #ffe8d6;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .coin-icon {
+            font-size: 2rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .cps-display {
+            font-size: 0.9rem;
+            color: #ddb892;
+            font-weight: bold;
+        }
+
+        /* Bagian Tombol Clicker Utama (Cangkir Kopi) */
+        .clicker-area {
+            position: relative;
+            margin: 25px 0;
+            cursor: pointer;
+            outline: none;
+            -webkit-tap-highlight-color: transparent; /* Menghilangkan highlight biru di HP saat diketuk */
+        }
+
+        .coffee-cup {
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle, #ddb892 0%, #b08968 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 -8px 15px rgba(0,0,0,0.3);
+            transition: transform 0.05s ease;
+            position: relative;
+            border: 5px solid #ffe8d6;
+        }
+
+        /* Efek getar dan membesar saat diklik */
+        .coffee-cup:active {
+            transform: scale(0.92);
+        }
+
+        /* Efek melayang angka koin (+1, +5, dll) saat diklik */
+        .floating-text {
+            position: absolute;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4rem;
+            color: #ffe8d6;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            pointer-events: none;
+            animation: floatUp 0.8s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) translateY(-100px) scale(1.2);
+            }
+        }
+
+        /* Bagian Upgrade / Toko */
+        .upgrade-section {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .upgrade-section h3 {
+            font-family: 'Fredoka One', cursive;
+            color: #ddb892;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            text-align: left;
+            border-bottom: 2px solid #7f5539;
+            padding-bottom: 5px;
+        }
+
+        .upgrade-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 220px;
+            overflow-y: auto; /* Agar bisa di-scroll di HP jika upgrade banyak */
+            padding-right: 5px;
+        }
+
+        /* Mempercantik scrollbar untuk HP */
+        .upgrade-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .upgrade-list::-webkit-scrollbar-thumb {
+            background-color: #7f5539;
+            border-radius: 10px;
+        }
+
+        .upgrade-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(127, 85, 57, 0.3);
+            border: 1px solid #7f5539;
+            border-radius: 14px;
+            padding: 10px 15px;
+            transition: background 0.2s, transform 0.1s;
+            cursor: pointer;
+        }
+
+        .upgrade-card:active {
+            transform: scale(0.98);
+        }
+
+        .upgrade-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: rgba(0, 0, 0, 0.2) !important;
+            border-color: #432818;
+        }
+
+        .upgrade-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .upgrade-icon {
+            font-size: 1.8rem;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 6px;
+            border-radius: 10px;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upgrade-details {
+            text-align: left;
+        }
+
+        .upgrade-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #ffe8d6;
+        }
+
+        .upgrade-desc {
+            font-size: 0.75rem;
+            color: #b08968;
+        }
+
+        .upgrade-cost-btn {
+            background: #7f5539;
+            color: #ffe8d6;
+            font-family: 'Fredoka One', cursive;
+            font-size: 0.85rem;
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+
+        .upgrade-card.disabled .upgrade-cost-btn {
+            background: #3a2618;
+            color: #7f5539;
+        }
+
+        /* Tombol Kontrol Tambahan */
+        .control-panel {
+            width: 100%;
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            border: none;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: white;
+            transition: opacity 0.2s;
+        }
+
+        .btn-reset {
+            background: #9a031e;
+        }
+
+        .btn-save {
+            background: #2a9d8f;
+        }
+
+        .btn-action:active {
+            opacity: 0.8;
+        }
+
+        .toast-msg {
+            position: fixed;
+            bottom: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffe8d6;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>☕ JURAGAN KOPI CLICKER</h1>
+    <p class="tagline">Ketuk kopi secepat mungkin dan jadilah pebisnis kopi tersukses! by Gio</p>
+
+    <div class="game-container">
+        <!-- Panel Statistik -->
+        <div class="stats-panel">
+            <div class="coin-display">
+                <span class="coin-icon">🪙</span>
+                <span id="coins">0</span>
+            </div>
+            <div class="cps-display">
+                Pendapatan Otomatis: <span id="cps">0</span> Koin/detik
+            </div>
+            <div style="font-size: 0.75rem; color: #b08968; margin-top: 5px;">
+                Nilai Ketukan: +<span id="cpc">1</span> Koin/klik
+            </div>
+        </div>
+
+        <!-- Tombol Utama Cangkir Kopi -->
+        <div class="clicker-area" id="clickArea">
+            <div class="coffee-cup" id="coffeeBtn">☕</div>
+        </div>
+
+        <!-- Bagian Toko / Upgrade -->
+        <div class="upgrade-section">
+            <h3>🛒 Beli Alat & Rekrut Karyawan</h3>
+            <div class="upgrade-list">
+                
+                <!-- Upgrade 1: Sendok Otomatis -->
+                <div class="upgrade-card disabled" id="upg-1" onclick="buyUpgrade(1)">
+                    <div class="upgrade-info">
+                        <div class="upgrade-icon">🥄</div>
+                        <div class="upgrade-details">
+                            <div class="upgrade-name">Sendok Otomatis</div>
+                            <div class="upgrade-desc">Mengaduk sendiri (+0.2 Koin/detik)</div>
+                        </div>
+                    </div>
+                    <button class="upgrade-cost-btn" id="cost-1">15</button>
+                </div>
+
+                <!-- Upgrade 2: Gelas Lebih Besar -->
+                <div class="upgrade-card disabled" id="upg-2" onclick="buyUpgrade(2)">
+                    <div class="upgrade-info">
+                        <div class="upgrade-icon">🥛</div>
+                        <div class="upgrade-details">
+                            <div class="upgrade-name">Gelas Besar</div>
+                            <div class="upgrade-desc">Porsi dobel (+1 Koin per Klik)</div>
+                        </div>
+                    </div>
+                    <button class="upgrade-cost-btn" id="cost-2">50</button>
+                </div>
+
+                <!-- Upgrade 3: Mesin Espresso -->
+                <div class="upgrade-card disabled" id="upg-3" onclick="buyUpgrade(3)">
+                    <div class="upgrade-info">
+                        <div class="upgrade-icon">☕</div>
+                        <div class="upgrade-details">
+                            <div class="upgrade-name">Mesin Espresso</div>
+                            <div class="upgrade-desc">Seduhan cepat (+2 Koin/detik)</div>
+                        </div>
+                    </div>
+                    <button class="upgrade-cost-btn" id="cost-3">250</button>
+                </div>
+
+                <!-- Upgrade 4: Barista Magang -->
+                <div class="upgrade-card disabled" id="upg-4" onclick="buyUpgrade(4)">
+                    <div class="upgrade-info">
+                        <div class="upgrade-icon">🧑‍🍳</div>
+                        <div class="upgrade-details">
+                            <div class="upgrade-name">Barista Magang</div>
+                            <div class="upgrade-desc">Membantu meracik (+10 Koin/detik)</div>
+                        </div>
+                    </div>
+                    <button class="upgrade-cost-btn" id="cost-4">1000</button>
+                </div>
+
+                <!-- Upgrade 5: Kedai Kopi Baru -->
+                <div class="upgrade-card disabled" id="upg-5" onclick="buyUpgrade(5)">
+                    <div class="upgrade-info">
+                        <div class="upgrade-icon">🏠</div>
+                        <div class="upgrade-details">
+                            <div class="upgrade-name">Cabang Kedai Baru</div>
+                            <div class="upgrade-desc">Buka cabang (+50 Koin/detik)</div>
+                        </div>
+                    </div>
+                    <button class="upgrade-cost-btn" id="cost-5">5000</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Tombol Kontrol Tambahan -->
+        <div class="control-panel">
+            <button class="btn-action btn-save" onclick="saveGame()">Simpan Progres 💾</button>
+            <button class="btn-action btn-reset" onclick="confirmReset()">Mulai Ulang 🔄</button>
+        </div>
+    </div>
+
+    <!-- Toast Notifikasi kecil -->
+    <div class="toast-msg" id="toast">Permainan disimpan otomatis!</div>
+
+    <!-- --- JAVASCRIPT: LOGIKA GAMEPLAY & PENYIMPANAN OTOMATIS --- -->
+    <script>
+        // --- 1. STATE GAME (DATA PERMAINAN) ---
+        let gameState = {
+            coins: 0,
+            coinsPerSecond: 0,
+            coinsPerClick: 1,
+            upgrades: {
+                spoon: { count: 0, cost: 15, baseCost: 15, cpsBonus: 0.2 },
+                bigCup: { count: 0, cost: 50, baseCost: 50, cpcBonus: 1 },
+                espresso: { count: 0, cost: 250, baseCost: 250, cpsBonus: 2 },
+                barista: { count: 0, cost: 1000, baseCost: 1000, cpsBonus: 10 },
+                branch: { count: 0, cost: 5000, baseCost: 5000, cpsBonus: 50 }
+            }
+        };
+
+        // --- 2. ELEMENT SELECTORS ---
+        const coinText = document.getElementById('coins');
+        const cpsText = document.getElementById('cps');
+        const cpcText = document.getElementById('cpc');
+        const clickArea = document.getElementById('clickArea');
+        const coffeeBtn = document.getElementById('coffeeBtn');
+        const toast = document.getElementById('toast');
+
+        // --- 3. EVENT LISTENERS ---
+        // Deteksi ketukan (Mendukung sentuhan HP dan klik Mouse)
+        clickArea.addEventListener('pointerdown', (e) => {
+            e.preventDefault(); // Mencegah zoom layar ganda di HP saat klik cepat
+            clickCoffee(e);
+        });
+
+        // --- 4. FUNGSIONALITAS INTI GAMEPLAY ---
+        
+        // Fungsi saat Kopi diketuk/klik
+        function clickCoffee(e) {
+            // Tambahkan koin berdasarkan nilai klik saat ini
+            gameState.coins += gameState.coinsPerClick;
+            updateUI();
+
+            // Efek Angka Koin Melayang (+1, +2, dll) tepat di posisi sentuhan jari/kursor
+            createFloatingText(e);
+        }
+
+        // Membuat angka melayang
+        function createFloatingText(e) {
+            const rect = clickArea.getBoundingClientRect();
+            let x, y;
+
+            if (e.clientX && e.clientY) {
+                // Sentuhan dengan mouse atau pointer langsung
+                x = e.clientX - rect.left;
+                y = e.clientY - rect.top;
+            } else {
+                // Default di tengah jika koordinat gagal dideteksi
+                x = rect.width / 2;
+                y = rect.height / 2;
+            }
+
+            const floatDiv = document.createElement('div');
+            floatDiv.className = 'floating-text';
+            floatDiv.innerText = `+${gameState.coinsPerClick}`;
+            floatDiv.style.left = `${x}px`;
+            floatDiv.style.top = `${y}px`;
+
+            clickArea.appendChild(floatDiv);
+
+            // Hapus elemen setelah animasi selesai (0.8 detik)
+            setTimeout(() => {
+                floatDiv.remove();
+            }, 800);
+        }
+
+        // Membeli Upgrade
+        function buyUpgrade(id) {
+            let selectedUpg;
+            let costEl;
+            let cardEl;
+
+            if (id === 1) {
+                selectedUpg = gameState.upgrades.spoon;
+                costEl = document.getElementById('cost-1');
+                cardEl = document.getElementById('upg-1');
+            } else if (id === 2) {
+                selectedUpg = gameState.upgrades.bigCup;
+                costEl = document.getElementById('cost-2');
+                cardEl = document.getElementById('upg-2');
+            } else if (id === 3) {
+                selectedUpg = gameState.upgrades.espresso;
+                costEl = document.getElementById('cost-3');
+                cardEl = document.getElementById('upg-3');
+            } else if (id === 4) {
+                selectedUpg = gameState.upgrades.barista;
+                costEl = document.getElementById('cost-4');
+                cardEl = document.getElementById('upg-4');
+            } else if (id === 5) {
+                selectedUpg = gameState.upgrades.branch;
+                costEl = document.getElementById('cost-5');
+                cardEl = document.getElementById('upg-5');
+            }
+
+            if (gameState.coins >= selectedUpg.cost) {
+                // Kurangi koin
+                gameState.coins -= selectedUpg.cost;
+                
+                // Tambah jumlah kepemilikan upgrade
+                selectedUpg.count++;
+
+                // Naikkan harga upgrade berikutnya sebesar 15% (agar game lebih menantang)
+                selectedUpg.cost = Math.floor(selectedUpg.baseCost * Math.pow(1.15, selectedUpg.count));
+
+                // Hitung ulang nilai bonus
+                recalculateBonuses();
+                
+                // Update Tampilan
+                updateUI();
+            }
+        }
+
+        // Hitung Ulang Bonus CPS dan CPC
+        function recalculateBonuses() {
+            // Hitung Koin per detik (CPS)
+            let totalCPS = 0;
+            totalCPS += gameState.upgrades.spoon.count * gameState.upgrades.spoon.cpsBonus;
+            totalCPS += gameState.upgrades.espresso.count * gameState.upgrades.espresso.cpsBonus;
+            totalCPS += gameState.upgrades.barista.count * gameState.upgrades.barista.cpsBonus;
+            totalCPS += gameState.upgrades.branch.count * gameState.upgrades.branch.cpsBonus;
+            // Gunakan pembulatan satu angka di belakang koma untuk sendok otomatis
+            gameState.coinsPerSecond = parseFloat(totalCPS.toFixed(1));
+
+            // Hitung Koin per klik (CPC)
+            let totalCPC = 1;
+            totalCPC += gameState.upgrades.bigCup.count * gameState.upgrades.bigCup.cpcBonus;
+            gameState.coinsPerClick = totalCPC;
+        }
+
+        // Update seluruh tampilan UI (Skor, harga, tombol aktif/nonaktif)
+        function updateUI() {
+            // Format tampilan koin agar tidak ada pecahan panjang
+            coinText.innerText = Math.floor(gameState.coins);
+            cpsText.innerText = gameState.coinsPerSecond;
+            cpcText.innerText = gameState.coinsPerClick;
+
+            // Update info harga di tombol upgrade
+            document.getElementById('cost-1').innerText = gameState.upgrades.spoon.cost;
+            document.getElementById('cost-2').innerText = gameState.upgrades.bigCup.cost;
+            document.getElementById('cost-3').innerText = gameState.upgrades.espresso.cost;
+            document.getElementById('cost-4').innerText = gameState.upgrades.barista.cost;
+            document.getElementById('cost-5').innerText = gameState.upgrades.branch.cost;
+
+            // Nyalakan/Matikan tombol upgrade tergantung jumlah koin yang dimiliki
+            toggleUpgradeCard('upg-1', gameState.upgrades.spoon.cost);
+            toggleUpgradeCard('upg-2', gameState.upgrades.bigCup.cost);
+            toggleUpgradeCard('upg-3', gameState.upgrades.espresso.cost);
+            toggleUpgradeCard('upg-4', gameState.upgrades.barista.cost);
+            toggleUpgradeCard('upg-5', gameState.upgrades.branch.cost);
+        }
+
+        function toggleUpgradeCard(elementId, cost) {
+            const card = document.getElementById(elementId);
+            if (gameState.coins >= cost) {
+                card.classList.remove('disabled');
+            } else {
+                card.classList.add('disabled');
+            }
+        }
+
+        // --- 5. GAME LOOP (PENDAPATAN OTOMATIS) ---
+        // Berjalan setiap 100 milidetik (0.1 detik) agar pergerakan koin lancar
+        setInterval(() => {
+            if (gameState.coinsPerSecond > 0) {
+                gameState.coins += (gameState.coinsPerSecond / 10);
+                updateUI();
+            }
+        }, 100);
+
+        // --- 6. PENYIMPANAN DATA (LOCAL STORAGE) ---
+        // Menyimpan game ke memori HP
+        function saveGame() {
+            localStorage.setItem('juraganKopiSave', JSON.stringify(gameState));
+            showToast("Progres kedai berhasil disimpan! 💾");
+        }
+
+        // Memuat game yang pernah disimpan
+        function loadGame() {
+            const savedData = localStorage.getItem('juraganKopiSave');
+            if (savedData) {
+                try {
+                    const parsedData = JSON.parse(savedData);
+                    // Pastikan struktur data kompatibel
+                    if (parsedData.upgrades) {
+                        gameState = parsedData;
+                        recalculateBonuses();
+                        updateUI();
+                    }
+                } catch (e) {
+                    console.error("Gagal memuat save game.");
+                }
+            }
+        }
+
+        // Munculkan notifikasi mengambang kecil di bawah
+        function showToast(message) {
+            toast.innerText = message;
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2000);
+        }
+
+        // Menyimpan game otomatis setiap 30 detik
+        setInterval(() => {
+            saveGame();
+        }, 30000);
+
+        // Konfirmasi reset game
+        function confirmReset() {
+            if (confirm("Apakah kamu yakin ingin memulai kedai kopi dari awal? Semua koin dan upgrade akan hilang.")) {
+                localStorage.removeItem('juraganKopiSave');
+                location.reload(); // Muat ulang halaman
+            }
+        }
+
+        // --- 7. INITIAL START ---
+        window.onload = function() {
+            loadGame(); // Muat data tersimpan saat web dibuka
+            updateUI();
+        };
+    </script>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Portofolio Gio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            color: #333;
+            text-align: center;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</body>
+</head>
+
+<html>
+<head>
+    <title>Juragan Kopi Clicker</title>
+    
+    <!-- TARUH KODE MONETAG ANDA DI SINI (Di bawah <head>) -->
+   <script>(function(s){s.dataset.zone='11343432',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    
+</head>
+<body>
+   
+ <header>
+        <h1>Selamat Datang di Website Gio</h1>
+        <p>Project Web Menggunakan SPCK Editor</p>
+    </header>
+
+    <div class="container">
+        <h2>Konten Utama Website</h2>
+        <p>.</p>
+    </div>
+
+<a href="#" class="btn-fitur">Mulai Jelajah</a>
+    </div>
+
+    <!-- ========================================================== -->
+    /* KODE IKLAN SOCIAL BAR ADSTERRA GIO SUDAH AKTIF DI SINI */
+    <!-- ========================================================== -->
+    </script src="https://pl30373988.effectivecpmnetwork.com/25/f5/d6/25f5d673f12a148c460c8865744eb423.js"></script>
+
+
+
+</html> <!-- Tombol Donasi Saweria -->
+<div class="saweria-container">
+    <a href="https://saweria.co/Giovillanova" target="_blank" class="btn-saweria">
+        <img src="https://saweria.co/favicon.ico" alt="Saweria Icon" class="saweria-icon">
+        Dukung Saya di Saweria
+    </a>
+</div>
